@@ -2,12 +2,25 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Sample {
+    public static final String alphabets = "abcdefghijklmnopqrstuvwxyz";
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        int arraySize;
+        int arraySize, searchValue;
         String arrays;
         int[] number;
-        int searchValue;
+        int encrpytkey, decrpytkey;
+        String encryptMessage, decryptMessage;
+        System.out.println("Enter a message to encrypt");
+        encryptMessage = input.nextLine();
+        System.out.println("Enter encrpytkey to shift");
+        encrpytkey = input.nextInt();
+        System.out.println("Encrypted message is: " + CeaserCipherEncrypt(encryptMessage, encrpytkey));
+        System.out.println("Enter a message to decrypt");
+        decryptMessage = input.next();
+        System.out.println("Enter key to shift to decrypt message");
+        decrpytkey = input.nextInt();
+        System.out.println("Encrypted message is: " + CeaserCipherDecrypt(decryptMessage, decrpytkey));
+
         System.out.println("Enter the size of number you want");
         arraySize = input.nextInt();
         number = new int[arraySize];
@@ -51,9 +64,38 @@ public class Sample {
             }
         }
         if(check){
-            System.out.println("The array contains " + arrayCheckValue);
+            System.out.printf("Yes, %d exist in the array", arrayCheckValue);
         }else{
-            System.out.println("The array does not contain " + arrayCheckValue);
+            System.out.printf("No, %d does not exist in the array", arrayCheckValue);
         }
+    }
+
+    public static String CeaserCipherEncrypt(String text, int shiftValue){
+        StringBuilder textCipher = new StringBuilder();
+        int keyValue, characterPosition;
+        char replaceValue;
+        text = text.toLowerCase();
+        for(int i = 0; i < text.length(); i++){
+            characterPosition = alphabets.indexOf(text.charAt(i));
+            keyValue = (shiftValue + characterPosition) % 26;
+            replaceValue = alphabets.charAt(keyValue);
+            textCipher.append(replaceValue);
+        }
+        return textCipher.toString();
+    }
+
+    public static String CeaserCipherDecrypt(String decryptText, int shiftValue){
+        decryptText = decryptText.toLowerCase();
+        StringBuilder message = new StringBuilder();
+        for(int i = 0; i < decryptText.length(); i++){
+            int characterPosition = alphabets.indexOf(decryptText.charAt(i));
+            int keyValue = (shiftValue + characterPosition) % 26;
+            if (keyValue < 0){
+                keyValue = alphabets.length() + keyValue;
+            }
+            char replaceValue = alphabets.charAt(keyValue);
+            message.append(replaceValue);
+        }
+        return message.toString();
     }
 }
